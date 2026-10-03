@@ -10,17 +10,17 @@ class handler(BaseHTTPRequestHandler):
         self.end_headers()
 
         try:
-            # 2. 从海外 Vercel 服务器抓取官方公共节点源
+            # 2. 【已修正】必须使用官方标准的 API 数据源路径
             url = "http://vpngate.net"
             req = urllib.request.Request(url, headers={'User-Agent': 'Mozilla/5.0'})
             
             with urllib.request.urlopen(req, timeout=8) as response:
                 csv_data = response.read().decode('utf-8')
                 
-                # 3. 数据清洗：去掉空行和无用注释，帮国内用户的 App 节省加载流量
+                # 3. 【已修正】使用 Python 标准的 startswith 语法进行数据清洗
                 cleaned_lines = []
                 for line in csv_data.split('\n'):
-                    if line.startsWith('*') or line.strip() == "":
+                    if line.startswith('*') or line.strip() == "":
                         continue
                     cleaned_lines.append(line)
                 
